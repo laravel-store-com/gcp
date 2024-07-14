@@ -1,5 +1,5 @@
 # Use an official Debian as a parent image
-FROM debian:12
+FROM debian:12-slim
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -33,10 +33,7 @@ RUN apt-get install -y ca-certificates curl gnupg && \
     chmod a+r /etc/apt/keyrings/docker.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update && \
-    apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose && \
-    groupadd docker && \
-    usermod -aG docker $USER && \
-    newgrp docker
+    apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
 
 # Setup SSH and other configurations
 RUN echo 'root:Adm123#' | chpasswd
