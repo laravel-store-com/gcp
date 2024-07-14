@@ -1,0 +1,12 @@
+imports:
+  - path: vm.jinja
+
+resources:
+  - name: deploy-develop-vm
+    type: vm.jinja
+    properties:
+      region: us-central1
+      zone: us-central1-a
+      vmtype: e2-standard-8
+      diskSizeGb: 75
+      service_account_email: "123949914299-compute@developer.gserviceaccount.com"
