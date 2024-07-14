@@ -10,3 +10,4 @@ resources:
       vmtype: e2-standard-8
       diskSizeGb: 75
       service_account_email: "123949914299-compute@developer.gserviceaccount.com"
+      docker_image: "12dev/wm:latest"
