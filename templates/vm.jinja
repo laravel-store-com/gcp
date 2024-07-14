@@ -1,0 +1,46 @@
+{% set vm_name = "develop" %}
+{% set machine_type = properties["vmtype"] %}
+{% set zone = properties["zone"] %}
+{% set disk_image = "projects/debian-cloud/global/images/family/debian-12" %}
+{% set disk_size_gb = properties["diskSizeGb"] %}
+{% set startup_script = properties["startup-script"] %}
+
+resources:
+  - type: compute.v1.instance
+    name: {{ vm_name }}
+    properties:
+      zone: {{ zone }}
+      machineType: zones/{{ zone }}/machineTypes/{{ machine_type }}
+      disks:
+        - deviceName: {{ vm_name }}
+          type: PERSISTENT
+          boot: true
+          autoDelete: true
+          initializeParams:
+            sourceImage: {{ disk_image }}
+            diskSizeGb: {{ disk_size_gb }}
+            diskType: zones/{{ zone }}/diskTypes/pd-ssd
+      networkInterfaces:
+        - network: global/networks/default
+          accessConfigs:
+            - name: External NAT
+              type: ONE_TO_ONE_NAT
+      metadata:
+        items:
+          - key: startup-script
+            value: |
+              {{ startup_script }}
+      serviceAccounts:
+        - email: {{ properties["service_account_email"] }}
+          scopes:
+            - https://www.googleapis.com/auth/devstorage.read_only
+            - https://www.googleapis.com/auth/logging.write
+            - https://www.googleapis.com/auth/monitoring.write
+            - https://www.googleapis.com/auth/servicecontrol
+            - https://www.googleapis.com/auth/service.management.readonly
+            - https://www.googleapis.com/auth/trace.append
+      tags:
+        items:
+          - http-server
+          - https-server
+          - lb-health-check
